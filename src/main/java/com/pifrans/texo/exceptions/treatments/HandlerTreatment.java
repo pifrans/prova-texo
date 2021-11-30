@@ -33,7 +33,7 @@ public class HandlerTreatment {
     public ResponseEntity<StandardTreatment> noSuchElement(NoSuchElementException exception) {
         StandardTreatment error = new StandardTreatment(HttpStatus.NOT_FOUND.value(), exception.getMessage(), System.currentTimeMillis(), NoSuchElementException.class.getName());
         LOG.error(error.toString());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(error);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(IOException.class)
