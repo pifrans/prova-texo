@@ -20,7 +20,7 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         Movie object = movieService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(object);
     }
@@ -32,11 +32,11 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
-    @GetMapping("/awardsMinMax")
-    public ResponseEntity<?> findDataByProducersMinAndMaxPeriod() {
+    @GetMapping("/awardsInterval")
+    public ResponseEntity<?> findDataByProducersMinAndMaxPeriod(@RequestParam Integer min, @RequestParam Integer max) {
         DataByProducersResponse object = new DataByProducersResponse();
-        object.setMin(movieService.getShorterProductionPeriodBetweenTwoAwards());
-        object.setMax(movieService.getLongerProductionPeriodBetweenTwoAwards());
+        object.setMin(movieService.getProductionPeriodBetweenTwoAwards(min));
+        object.setMax(movieService.getProductionPeriodBetweenTwoAwards(max));
 
         return ResponseEntity.status(HttpStatus.OK).body(object);
     }

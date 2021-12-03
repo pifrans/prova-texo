@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8085/movies/awardsMinMax",
+					"raw": "http://localhost:8085/movies/awardsInterval?min=1&max=13",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -19,7 +19,17 @@
 					"port": "8085",
 					"path": [
 						"movies",
-						"awardsMinMax"
+						"awardsInterval"
+					],
+					"query": [
+						{
+							"key": "min",
+							"value": "1"
+						},
+						{
+							"key": "max",
+							"value": "13"
+						}
 					]
 				}
 			},
@@ -90,7 +100,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\":1,\n    \"producers\":\"Produtor update\",\n    \"studios\":\"Studio update\",\n    \"title\":\"Title update\",\n    \"year\": 2020,\n    \"winner\":false\n}",
+					"raw": "{\n    \"id\":2,\n    \"producers\":\"Produtor update\",\n    \"studios\":\"Studio update\",\n    \"title\":\"Title update\",\n    \"year\": 2020,\n    \"winner\":false\n}",
 					"options": {
 						"raw": {
 							"language": "json"

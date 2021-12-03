@@ -14,10 +14,7 @@ import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +31,7 @@ public class MovieService {
         Reader reader = new InputStreamReader(file.getInputStream());
         CsvToBean<Movie> csvToBean = new CsvToBeanBuilder<Movie>(reader).withType(Movie.class).withSeparator(';').build();
         List<Movie> movies = csvToBean.parse();
-
-        for (Movie movie : movies) {
-            movieRepository.save(movie);
-        }
+        movieRepository.saveAll(movies);
     }
 
     public List<Movie> findAll() {
@@ -70,26 +64,17 @@ public class MovieService {
         return dtos;
     }
 
-    public List<DataByProducersDTO> getShorterProductionPeriodBetweenTwoAwards() throws NoSuchElementException {
+    public List<DataByProducersDTO> getProductionPeriodBetweenTwoAwards(Integer period) throws NoSuchElementException {
         List<DataByProducersDTO> dtos = findDataByProducers();
 
         if (dtos.size() < 1) {
             throw new RuntimeException("É necessário ter no mínimo 2 filmes cadastrados!");
         }
 
-        DataByProducersDTO dto = Collections.min(dtos, new DataByProducersDTO());
-        return dtos.stream().filter(o -> o.getPeriod().equals(dto.getPeriod())).collect(Collectors.toList());
-    }
+        dtos = dtos.stream().filter(o -> o.getPeriod().equals(period)).collect(Collectors.toList());
+        DataByProducersDTO dto = dtos.stream().findFirst().orElseThrow(() -> new NoSuchElementException("Não foi encontrado filmes de um mesmo produtor com intervalo igual a (" + period + ")!"));
 
-    public List<DataByProducersDTO> getLongerProductionPeriodBetweenTwoAwards() {
-        List<DataByProducersDTO> dtos = findDataByProducers();
-
-        if (dtos.size() < 1) {
-            throw new RuntimeException("É necessário ter no mínimo 2 filmes cadastrados!");
-        }
-
-        DataByProducersDTO dto = Collections.max(dtos, new DataByProducersDTO());
-        return dtos.stream().filter(o -> o.getPeriod().equals(dto.getPeriod())).collect(Collectors.toList());
+        return new ArrayList<>(List.of(dto));
     }
 
     public Movie update(Movie movie) throws PersistenceException {
